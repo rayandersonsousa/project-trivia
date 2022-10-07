@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import getToken from '../services/apiToken';
 import logo from '../trivia.png';
 import '../App.css';
 
@@ -9,9 +11,14 @@ export default class Login extends Component {
     btnDisable: true,
   };
 
-  handleSubmit = (event) => {
+  handleSubmit = async (event) => {
     event.preventDefault();
-    console.log('bora jogar danado');
+    const { history } = this.props;
+    const { token } = await getToken();
+    localStorage.setItem('token', token);
+    if (token.length) {
+      history.push('/game');
+    }
   };
 
   validateTriviaForm = () => {
@@ -73,3 +80,9 @@ export default class Login extends Component {
     );
   }
 }
+
+Login.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+};
