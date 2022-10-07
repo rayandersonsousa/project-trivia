@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import getToken from '../services/apiToken';
 import logo from '../trivia.png';
 import '../App.css';
+import { actionEmail } from '../redux/actions/action';
 
-export default class Login extends Component {
+class Login extends Component {
   state = {
     email: '',
     name: '',
@@ -13,10 +15,12 @@ export default class Login extends Component {
 
   handleSubmit = async (event) => {
     event.preventDefault();
-    const { history } = this.props;
+    const { history, dispatch } = this.props;
+    const { email, name } = this.state;
     const { token } = await getToken();
     localStorage.setItem('token', token);
     if (token.length) {
+      dispatch(actionEmail(email, name));
       history.push('/game');
     }
   };
@@ -68,7 +72,6 @@ export default class Login extends Component {
               data-testid="input-player-name"
               onChange={ this.handleChange }
               name="name"
-              // value={ name }
             />
           </label>
           <div>
@@ -93,8 +96,15 @@ export default class Login extends Component {
   }
 }
 
+// const mapDispatchToProps = (dispatch) => ({
+//   dispatch,
+// });
+
 Login.propTypes = {
+  dispatch: PropTypes.func,
   history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
-};
+    push: PropTypes.func,
+  }),
+}.isRequired;
+
+export default connect()(Login);
