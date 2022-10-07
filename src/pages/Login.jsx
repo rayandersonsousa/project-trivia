@@ -37,6 +37,11 @@ export default class Login extends Component {
     }, () => { this.validateTriviaForm(); });
   };
 
+  redirectSettings = () => {
+    const { history } = this.props;
+    history.push('/settings');
+  };
+
   render() {
     const { btnDisable } = this.state;
     return (
@@ -73,6 +78,13 @@ export default class Login extends Component {
               disabled={ btnDisable }
             >
               Play
+            </button>
+            <button
+              data-testid="btn-settings"
+              type="button"
+              onClick={ this.redirectSettings }
+            >
+              Settings
             </button>
           </div>
         </form>
