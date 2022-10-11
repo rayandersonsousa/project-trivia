@@ -1,4 +1,5 @@
 import { TYPE_EMAIL_USER } from '../actions/action';
+import { SET_SCORE } from '../actions/actionScore';
 
 const INITIAL_STATE = {
   name: '',
@@ -14,6 +15,10 @@ const player = (state = INITIAL_STATE, action) => {
       ...state,
       gravatarEmail: action.payload.email,
       name: action.payload.user,
+    };
+  case SET_SCORE:
+    return {
+      ...state, score: action.payload,
     };
   default:
     return state;
