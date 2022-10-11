@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Header from '../components/Header';
 import getResults from '../services/apiResults';
 import '../App.css';
+import { setScore } from '../redux/actions/actionScore';
 
 class Game extends Component {
   state = {
@@ -15,6 +16,7 @@ class Game extends Component {
     btnDisable: false,
     interval: null,
     btnNext: false,
+    score: 0,
   };
 
   async componentDidMount() {
@@ -39,28 +41,45 @@ class Game extends Component {
     this.setState({
       answer: newArray,
     });
+    console.log(newArray);
   };
 
   handleClick = (event) => {
+    const { getScore } = this.props;
+    const score = this.scoreAnwser();
     const one = document.querySelectorAll('.incorrectAnw');
     one.forEach((butt) => {
       const two = butt.getAttribute('data-testid');
       if (two === 'correct-answer') {
         console.log(event.target);
         butt.classList.add('CORRECT_ANSWER');
+        getScore(score);
+        console.log('chegou no if');
       } else {
         butt.classList.add('INCORRECT_ANSWER');
+        // getScore(score);
       }
     });
     this.setState({ btnNext: true });
   };
 
-  // scoreAnwser = () => {
-  //   const EASY_MODE = 1;
-  //   const MEDIUM_MODE = 2;
-  //   const HARD_MODE = 3;
-  //   const numberCalc = 10;
-  // };
+  scoreAnwser = () => {
+    const { index, results, timer } = this.state;
+    const EASY_MODE = 1;
+    const MEDIUM_MODE = 2;
+    const HARD_MODE = 3;
+    const DEZ = 10;
+    switch (results[index].difficulty) {
+    case 'easy':
+      return DEZ + (timer * EASY_MODE);
+    case 'medium':
+      return DEZ + (timer * MEDIUM_MODE);
+    case 'hard':
+      return DEZ + (timer * HARD_MODE);
+    default:
+      return 0;
+    }
+  };
 
   // https://devtrium.com/posts/set-interval-react
 
@@ -147,10 +166,15 @@ const mapStateToProps = (state) => ({
   score: state.player.score,
 });
 
+const mapDispatchToProps = (dispatch) => ({
+  getScore: (state) => dispatch(setScore(state)),
+});
+
 Game.propTypes = {
+  getScore: PropTypes.func,
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
   score: PropTypes.number.isRequired,
 };
-export default connect(mapStateToProps)(Game);
+export default connect(mapStateToProps, mapDispatchToProps)(Game);
