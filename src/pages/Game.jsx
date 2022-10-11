@@ -151,5 +151,6 @@ Game.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
+  score: PropTypes.number.isRequired,
 };
 export default connect(mapStateToProps)(Game);
