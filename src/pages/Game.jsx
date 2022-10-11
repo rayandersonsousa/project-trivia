@@ -10,6 +10,9 @@ export default class Game extends Component {
     index: 0,
     hasResults: false,
     answer: [],
+    timer: 30,
+    btnDisable: false,
+    interval: null,
   };
 
   async componentDidMount() {
@@ -22,6 +25,7 @@ export default class Game extends Component {
       history.push('/');
     } this.setState({ results: arrayQuestiion.results, hasResults: true });
     this.settingAnwser(arrayQuestiion.results);
+    this.setTimeOut();
   }
 
   settingAnwser = async (results) => {
@@ -47,8 +51,29 @@ export default class Game extends Component {
     });
   };
 
+  // https://devtrium.com/posts/set-interval-react
+
+  functionInterval = (click) => {
+    const { timer, interval } = this.state;
+    if (timer > 0 && click === undefined) {
+      return this.setState((prevState) => ({
+        timer: prevState.timer - 1,
+      }));
+    }
+    clearInterval(interval);
+    this.setState({ btnDisable: true });
+  };
+
+  setTimeOut = () => {
+    const miliSec = 1000;
+    const interval = setInterval(() => {
+      this.setState({ interval });
+      this.functionInterval();
+    }, miliSec);
+  };
+
   render() {
-    const { index, results, hasResults, answer } = this.state;
+    const { index, results, hasResults, answer, timer, btnDisable } = this.state;
     const number = 0.5;
     return (
       <div>
@@ -56,6 +81,7 @@ export default class Game extends Component {
         {hasResults
         && (
           <div>
+            <p>{timer}</p>
             <h3
               data-testid="question-category"
             >
@@ -79,6 +105,7 @@ export default class Game extends Component {
                     data-testid={ element.id }
                     className="incorrectAnw"
                     onClick={ this.handleClick }
+                    disabled={ btnDisable }
                   >
                     {(element.answer)}
 
