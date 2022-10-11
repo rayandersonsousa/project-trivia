@@ -20,7 +20,6 @@ class Header extends Component {
   render() {
     const { name } = this.props;
     const { imgGravatar } = this.state;
-    console.log(this.props);
     return (
       <header>
         <div>
