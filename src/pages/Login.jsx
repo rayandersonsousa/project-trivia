@@ -57,7 +57,7 @@ class Login extends Component {
             E-mail
             <input
               id="email"
-              type="text"
+              type="email"
               data-testid="input-gravatar-email"
               onChange={ this.handleChange }
               name="email"
