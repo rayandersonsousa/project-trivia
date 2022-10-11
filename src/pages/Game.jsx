@@ -16,6 +16,7 @@ class Game extends Component {
     btnDisable: false,
     interval: null,
     btnNext: false,
+    CORRECT_ANSWER: 'correct-answer',
   };
 
   async componentDidMount() {
@@ -32,33 +33,33 @@ class Game extends Component {
   }
 
   settingAnwser = async (results) => {
+    const { CORRECT_ANSWER } = this.state;
     const newArray = results.map((item) => [...item.incorrect_answers
       .map((incorrect, index) => ({
         answer: incorrect,
         id: `wrong-answer-${index}`,
-      })), { answer: item.correct_answer, id: 'correct-answer' }]);
+      })), { answer: item.correct_answer, id: CORRECT_ANSWER }]);
     this.setState({
       answer: newArray,
     });
-    console.log(newArray);
   };
 
-  handleClick = () => {
+  handleClick = (element) => {
+    const { CORRECT_ANSWER } = this.state;
     const { getScore } = this.props;
-    const score = this.scoreAnwser();
-    const one = document.querySelectorAll('.incorrectAnw');
-    one.forEach((butt) => {
-      const two = butt.getAttribute('data-testid');
-      if (two === 'correct-answer') {
-        // console.log(event.target);
-        butt.classList.add('CORRECT_ANSWER');
-        getScore(score);
-        console.log('chegou no if');
+    const btnsOptions = document.querySelectorAll('.incorrectAnw');
+    btnsOptions.forEach((item) => {
+      const btnData = item.getAttribute('data-testid');
+      if (btnData === CORRECT_ANSWER) {
+        item.classList.add('CORRECT_ANSWER');
       } else {
-        butt.classList.add('INCORRECT_ANSWER');
-        // getScore(score);
+        item.classList.add('INCORRECT_ANSWER');
       }
     });
+    if (element.id === CORRECT_ANSWER) {
+      const score = this.scoreAnwser();
+      getScore(score);
+    }
     this.setState({ btnNext: true });
   };
 
@@ -103,13 +104,10 @@ class Game extends Component {
 
   render() {
     const { index, results, hasResults, answer, timer, btnDisable, btnNext } = this.state;
-    const { score } = this.props;
     const number = 0.5;
     return (
       <div>
-        <Header
-          score={ score }
-        />
+        <Header />
         {hasResults
         && (
           <div>
@@ -174,6 +172,5 @@ Game.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
-  score: PropTypes.number.isRequired,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Game);
