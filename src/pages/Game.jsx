@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Header from '../components/Header';
 import getResults from '../services/apiResults';
+import '../App.css';
 
 export default class Game extends Component {
   state = {
@@ -15,10 +16,8 @@ export default class Game extends Component {
     const { history } = this.props;
     const recoveredToken = localStorage.getItem('token');
     const arrayQuestiion = await getResults(recoveredToken);
-    console.log(arrayQuestiion);
     const expiredToken = 3;
     if (arrayQuestiion.response_code === expiredToken) {
-      console.log('chegou aqui');
       localStorage.clear();
       history.push('/');
     } this.setState({ results: arrayQuestiion.results, hasResults: true });
@@ -31,11 +30,21 @@ export default class Game extends Component {
         answer: incorrect,
         id: `wrong-answer-${index}`,
       })), { answer: item.correct_answer, id: 'correct-answer' }]);
-      // console.log(newArray[0].sort(() => number - Math.random()));
     this.setState({
       answer: newArray,
     });
-    console.log(newArray);
+  };
+
+  handleClick = () => {
+    const one = document.querySelectorAll('.incorrectAnw');
+    one.forEach((butt) => {
+      const two = butt.getAttribute('data-testid');
+      if (two === 'correct-answer') {
+        butt.classList.add('CORRECT_ANSWER');
+      } else {
+        butt.classList.add('INCORRECT_ANSWER');
+      }
+    });
   };
 
   render() {
@@ -68,6 +77,8 @@ export default class Game extends Component {
                     type="button"
                     key={ incorrect }
                     data-testid={ element.id }
+                    className="incorrectAnw"
+                    onClick={ this.handleClick }
                   >
                     {(element.answer)}
 

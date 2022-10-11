@@ -1,0 +1,7 @@
+.CORRECT_ANSWER {
+  border: 3px solid rgb(6, 240, 15)
+}
+
+.INCORECT_ANSWER {
+border: 3px solid red
+}
