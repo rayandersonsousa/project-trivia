@@ -3,7 +3,6 @@ import renderWithRouterAndRedux from '../helpers/renderWithRouterAndRedux';
 import { screen, waitFor } from '@testing-library/react';
 import App from '../App';
 import userEvent from '@testing-library/user-event'
-import { act } from 'react-dom/test-utils';
 
 describe('Tests information present in trivia game login page', () => {
   test('if the page has the email input', () => {

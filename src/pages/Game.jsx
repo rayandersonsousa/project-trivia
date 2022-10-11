@@ -16,7 +16,6 @@ class Game extends Component {
     btnDisable: false,
     interval: null,
     btnNext: false,
-    score: 0,
   };
 
   async componentDidMount() {
@@ -44,14 +43,14 @@ class Game extends Component {
     console.log(newArray);
   };
 
-  handleClick = (event) => {
+  handleClick = () => {
     const { getScore } = this.props;
     const score = this.scoreAnwser();
     const one = document.querySelectorAll('.incorrectAnw');
     one.forEach((butt) => {
       const two = butt.getAttribute('data-testid');
       if (two === 'correct-answer') {
-        console.log(event.target);
+        // console.log(event.target);
         butt.classList.add('CORRECT_ANSWER');
         getScore(score);
         console.log('chegou no if');
@@ -137,7 +136,7 @@ class Game extends Component {
                     key={ incorrect }
                     data-testid={ element.id }
                     className="incorrectAnw"
-                    onClick={ this.handleClick }
+                    onClick={ () => this.handleClick(element) }
                     disabled={ btnDisable }
                   >
                     {(element.answer)}
@@ -171,7 +170,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 Game.propTypes = {
-  getScore: PropTypes.func,
+  getScore: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
