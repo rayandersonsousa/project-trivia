@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Header from '../components/Header';
 import getResults from '../services/apiResults';
 import '../App.css';
 
-export default class Game extends Component {
+class Game extends Component {
   state = {
     results: [],
     index: 0,
@@ -13,6 +14,7 @@ export default class Game extends Component {
     timer: 30,
     btnDisable: false,
     interval: null,
+    btnNext: false,
   };
 
   async componentDidMount() {
@@ -39,17 +41,26 @@ export default class Game extends Component {
     });
   };
 
-  handleClick = () => {
+  handleClick = (event) => {
     const one = document.querySelectorAll('.incorrectAnw');
     one.forEach((butt) => {
       const two = butt.getAttribute('data-testid');
       if (two === 'correct-answer') {
+        console.log(event.target);
         butt.classList.add('CORRECT_ANSWER');
       } else {
         butt.classList.add('INCORRECT_ANSWER');
       }
     });
+    this.setState({ btnNext: true });
   };
+
+  // scoreAnwser = () => {
+  //   const EASY_MODE = 1;
+  //   const MEDIUM_MODE = 2;
+  //   const HARD_MODE = 3;
+  //   const numberCalc = 10;
+  // };
 
   // https://devtrium.com/posts/set-interval-react
 
@@ -73,11 +84,14 @@ export default class Game extends Component {
   };
 
   render() {
-    const { index, results, hasResults, answer, timer, btnDisable } = this.state;
+    const { index, results, hasResults, answer, timer, btnDisable, btnNext } = this.state;
+    const { score } = this.props;
     const number = 0.5;
     return (
       <div>
-        <Header />
+        <Header
+          score={ score }
+        />
         {hasResults
         && (
           <div>
@@ -112,6 +126,16 @@ export default class Game extends Component {
                   </button>
                 ),
               )}
+              <br />
+              {btnNext && (
+                <button
+                  type="button"
+                  data-testid="btn-next"
+                  onClick={ this.handleNext }
+                >
+                  Next
+                </button>
+              )}
             </div>
           </div>)}
       </div>
@@ -119,8 +143,13 @@ export default class Game extends Component {
   }
 }
 
+const mapStateToProps = (state) => ({
+  score: state.player.score,
+});
+
 Game.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
 };
+export default connect(mapStateToProps)(Game);
