@@ -110,7 +110,8 @@ class Game extends Component {
 
   handleNext = () => {
     const { index } = this.state;
-    const { reset } = this.props;
+    const { reset, history } = this.props;
+    const maxIndex = 4;
     const btnsOptions = document.querySelectorAll('.incorrectAnw');
     btnsOptions.forEach((item) => item.classList.remove(
       'CORRECT_ANSWER',
@@ -120,6 +121,10 @@ class Game extends Component {
       index: index + 1,
     });
     reset(true);
+    if (index === maxIndex) {
+      console.log(index);
+      history.push('/feedback');
+    }
   };
 
   render() {
