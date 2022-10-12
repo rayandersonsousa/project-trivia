@@ -12,9 +12,9 @@ class Game extends Component {
     index: 0,
     hasResults: false,
     answer: [],
-    timer: 30,
+    // timer: 30,
     btnDisable: false,
-    interval: null,
+    // interval: null,
     btnNext: false,
     CORRECT_ANSWER: 'correct-answer',
   };
@@ -29,7 +29,7 @@ class Game extends Component {
       history.push('/');
     } this.setState({ results: arrayQuestiion.results, hasResults: true });
     this.settingAnwser(arrayQuestiion.results);
-    this.setTimeOut();
+    // this.setTimeOut();
   }
 
   settingAnwser = async (results) => {
@@ -50,6 +50,7 @@ class Game extends Component {
     const btnsOptions = document.querySelectorAll('.incorrectAnw');
     btnsOptions.forEach((item) => {
       const btnData = item.getAttribute('data-testid');
+      console.log(btnData);
       if (btnData === CORRECT_ANSWER) {
         item.classList.add('CORRECT_ANSWER');
       } else {
@@ -58,7 +59,10 @@ class Game extends Component {
     });
     if (element.id === CORRECT_ANSWER) {
       const score = this.scoreAnwser();
+      console.log('acertou');
       getScore(score);
+    } else {
+      console.log('errou');
     }
     this.setState({ btnNext: true });
   };
@@ -83,23 +87,36 @@ class Game extends Component {
 
   // https://devtrium.com/posts/set-interval-react
 
-  functionInterval = (click) => {
-    const { timer, interval } = this.state;
-    if (timer > 0 && click === undefined) {
-      return this.setState((prevState) => ({
-        timer: prevState.timer - 1,
-      }));
-    }
-    clearInterval(interval);
-    this.setState({ btnDisable: true });
-  };
+  // functionInterval = (click) => {
+  //   const { timer, interval } = this.state;
+  //   if (timer > 0 && click === undefined) {
+  //     return this.setState((prevState) => ({
+  //       timer: prevState.timer - 1,
+  //     }));
+  //   }
+  //   clearInterval(interval);
+  //   this.setState({ btnDisable: true });
+  // };
 
-  setTimeOut = () => {
-    const miliSec = 1000;
-    const interval = setInterval(() => {
-      this.setState({ interval });
-      this.functionInterval();
-    }, miliSec);
+  // setTimeOut = () => {
+  //   const miliSec = 1000;
+  //   const interval = setInterval(() => {
+  //     this.setState({ interval });
+  //     this.functionInterval();
+  //   }, miliSec);
+  // };
+
+  handleNext = () => {
+    const { index } = this.state;
+    const btnsOptions = document.querySelectorAll('.incorrectAnw');
+    btnsOptions.forEach((item) => item.classList.remove(
+      'CORRECT_ANSWER',
+      'INCORRECT_ANSWER',
+    ));
+    this.setState({
+      index: index + 1,
+      timer: 30,
+    });
   };
 
   render() {
@@ -111,7 +128,7 @@ class Game extends Component {
         {hasResults
         && (
           <div>
-            <p>{timer}</p>
+            {/* <p>{timer}</p> */}
             <h3
               data-testid="question-category"
             >
@@ -127,7 +144,7 @@ class Game extends Component {
             <div
               data-testid="answer-options"
             >
-              {answer[index].sort(() => number - Math.random()).map(
+              {answer[index].map(
                 (element, incorrect) => (
                   <button
                     type="button"
@@ -141,7 +158,7 @@ class Game extends Component {
 
                   </button>
                 ),
-              )}
+              ).sort(() => number - Math.random())}
               <br />
               {btnNext && (
                 <button

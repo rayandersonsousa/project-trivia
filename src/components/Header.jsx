@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 class Header extends Component {
   state = {
     imgGravatar: '',
+    timer: 30,
+    interval: null,
   };
 
   async componentDidMount() {
@@ -15,11 +17,38 @@ class Header extends Component {
     this.setState({
       imgGravatar: imgUrl,
     });
+    this.setTimeOut();
+  }
+
+  functionInterval = (click) => {
+    const { timer, interval } = this.state;
+    if (timer > 0 && click === undefined) {
+      return this.setState((prevState) => ({
+        timer: prevState.timer - 1,
+      }));
+    }
+    clearInterval(interval);
+    this.setState({ btnDisable: true });
+  };
+
+  setTimeOut = () => {
+    const miliSec = 1000;
+    const interval = setInterval(() => {
+      this.setState({ interval });
+      this.functionInterval();
+    }, miliSec);
+  };
+
+  componentDidUpdate() {
+    const { timer } = this.state;
+    if (timer === 0) {
+      
+    }
   }
 
   render() {
     const { name, score } = this.props;
-    const { imgGravatar } = this.state;
+    const { imgGravatar, timer } = this.state;
     return (
       <header>
         <div>
@@ -33,7 +62,7 @@ class Header extends Component {
           <h3
             data-testid="header-player-name"
           >
-            { name }
+            {name}
           </h3>
         </div>
         <div>
@@ -42,6 +71,7 @@ class Header extends Component {
           >
             {score}
           </span>
+          <p>{timer}</p>
         </div>
       </header>
     );
