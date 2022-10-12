@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import getResults from '../services/apiResults';
 import '../App.css';
 import { setScore } from '../redux/actions/actionScore';
+import { resetTimer } from '../redux/actions/actionTime';
 
 class Game extends Component {
   state = {
@@ -13,7 +14,7 @@ class Game extends Component {
     hasResults: false,
     answer: [],
     // timer: 30,
-    btnDisable: false,
+    // btnDisable: false,
     // interval: null,
     btnNext: false,
     CORRECT_ANSWER: 'correct-answer',
@@ -68,18 +69,19 @@ class Game extends Component {
   };
 
   scoreAnwser = () => {
-    const { index, results, timer } = this.state;
+    const { index, results } = this.state;
+    const { timeLeft } = this.props;
     const EASY_MODE = 1;
     const MEDIUM_MODE = 2;
     const HARD_MODE = 3;
     const DEZ = 10;
     switch (results[index].difficulty) {
     case 'easy':
-      return DEZ + (timer * EASY_MODE);
+      return DEZ + (timeLeft * EASY_MODE);
     case 'medium':
-      return DEZ + (timer * MEDIUM_MODE);
+      return DEZ + (timeLeft * MEDIUM_MODE);
     case 'hard':
-      return DEZ + (timer * HARD_MODE);
+      return DEZ + (timeLeft * HARD_MODE);
     default:
       return 0;
     }
@@ -108,6 +110,7 @@ class Game extends Component {
 
   handleNext = () => {
     const { index } = this.state;
+    const { reset } = this.props;
     const btnsOptions = document.querySelectorAll('.incorrectAnw');
     btnsOptions.forEach((item) => item.classList.remove(
       'CORRECT_ANSWER',
@@ -115,12 +118,13 @@ class Game extends Component {
     ));
     this.setState({
       index: index + 1,
-      timer: 30,
     });
+    reset(true);
   };
 
   render() {
-    const { index, results, hasResults, answer, timer, btnDisable, btnNext } = this.state;
+    const { index, results, hasResults, answer, btnNext } = this.state;
+    const { isDisabled } = this.props;
     const number = 0.5;
     return (
       <div>
@@ -152,7 +156,7 @@ class Game extends Component {
                     data-testid={ element.id }
                     className="incorrectAnw"
                     onClick={ () => this.handleClick(element) }
-                    disabled={ btnDisable }
+                    disabled={ isDisabled }
                   >
                     {(element.answer)}
 
@@ -178,16 +182,21 @@ class Game extends Component {
 
 const mapStateToProps = (state) => ({
   score: state.player.score,
+  isDisabled: state.timer.btnDisabled,
+  timeLeft: state.timer.remainingTimer,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   getScore: (state) => dispatch(setScore(state)),
+  reset: (state) => dispatch(resetTimer(state)),
 });
 
 Game.propTypes = {
-  getScore: PropTypes.func.isRequired,
+  getScore: PropTypes.func,
+  disable: PropTypes.func,
   history: PropTypes.shape({
     push: PropTypes.func,
-  }).isRequired,
-};
+  }),
+  isDisabled: PropTypes.bool,
+}.isRequired;
 export default connect(mapStateToProps, mapDispatchToProps)(Game);
