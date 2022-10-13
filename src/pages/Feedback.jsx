@@ -1,11 +1,42 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-export default class Feedback extends Component {
+class Feedback extends Component {
+  state = {
+    urlGravatar: '',
+  };
+
+  componentDidMount() {
+    const token = localStorage.getItem('token');
+    const urlGravatarAndToken = `https://www.gravatar.com/avatar/${token}`;
+    this.setState({ urlGravatar: urlGravatarAndToken });
+  }
+
   render() {
+    const { name, score } = this.props;
+    const { urlGravatar } = this.state;
     return (
       <div>
         <h1 data-testid="feedback-text">Feedback</h1>
+        <div>
+          <img src={ urlGravatar } alt="foto" data-testid="header-profile-picture" />
+          <p data-testid="header-player-name">{name}</p>
+          <span data-testid="header-score">{score}</span>
+        </div>
       </div>
     );
   }
 }
+
+Feedback.propTypes = {
+  name: PropTypes.string,
+  score: PropTypes.string,
+}.isRequired;
+
+const mapStateToProps = (state) => ({
+  score: state.player.score,
+  name: state.player.name,
+});
+
+export default connect(mapStateToProps)(Feedback);
