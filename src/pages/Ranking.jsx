@@ -21,7 +21,7 @@ export default class Ranking extends Component {
           onClick={ this.handleHome }
           data-testid="btn-go-home"
         >
-          Home
+          Homes
 
         </button>
 
