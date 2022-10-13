@@ -19,14 +19,25 @@ class Feedback extends Component {
     const assertionsNumber = 3;
     return (
       <div>
-        <h1 data-testid="feedback-text">
-          {assertions >= assertionsNumber ? 'Well Done!' : 'Could be better...'}
-        </h1>
-
-        <div>
+        <header>
           <img src={ urlGravatar } alt="foto" data-testid="header-profile-picture" />
           <p data-testid="header-player-name">{name}</p>
           <span data-testid="header-score">{score}</span>
+        </header>
+        <h1 data-testid="feedback-text">
+          {assertions >= assertionsNumber ? 'Well Done!' : 'Could be better...'}
+        </h1>
+        <div>
+          <p
+            data-testid="feedback-total-score"
+          >
+            {score}
+          </p>
+          <p
+            data-testid="feedback-total-question"
+          >
+            {assertions}
+          </p>
         </div>
       </div>
     );
