@@ -54,7 +54,7 @@ class Ranking extends Component {
             .map((player, index) => (
               <div key={ player.token }>
                 <img
-                  src={ `https://www.gravatar.com/${md5(player.gravatarEmail).toString()}` }
+                  src={ `https://www.gravatar.com/avatar/${md5(player.gravatarEmail).toString()}` }
                   alt="Gravatar"
                 />
                 <p
