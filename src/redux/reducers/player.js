@@ -1,4 +1,5 @@
 import { TYPE_EMAIL_USER } from '../actions/action';
+import { RESET_SCORE } from '../actions/actionResetScore';
 import { SET_SCORE } from '../actions/actionScore';
 
 const INITIAL_STATE = {
@@ -21,6 +22,12 @@ const player = (state = INITIAL_STATE, action) => {
       ...state,
       score: state.score + action.payload.score,
       assertions: state.assertions + action.payload.assertions,
+    };
+  case RESET_SCORE:
+    return {
+      ...state,
+      score: action.payload,
+      assertions: action.payload,
     };
   default:
     return state;

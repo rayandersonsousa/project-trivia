@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import resetScore from '../redux/actions/actionResetScore';
 
 class Feedback extends Component {
   state = {
@@ -12,6 +13,12 @@ class Feedback extends Component {
     const urlGravatarAndToken = `https://www.gravatar.com/avatar/${token}`;
     this.setState({ urlGravatar: urlGravatarAndToken });
   }
+
+  handlePlayAgain = () => {
+    const { history, newReset } = this.props;
+    newReset(0);
+    history.push('/');
+  };
 
   render() {
     const { name, score, assertions } = this.props;
@@ -39,6 +46,13 @@ class Feedback extends Component {
             {assertions}
           </p>
         </div>
+        <button
+          type="button"
+          data-testid="btn-play-again"
+          onClick={ this.handlePlayAgain }
+        >
+          Play Again
+        </button>
       </div>
     );
   }
@@ -47,6 +61,9 @@ class Feedback extends Component {
 Feedback.propTypes = {
   name: PropTypes.string,
   score: PropTypes.string,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }),
 }.isRequired;
 
 const mapStateToProps = (state) => ({
@@ -55,4 +72,8 @@ const mapStateToProps = (state) => ({
   assertions: state.player.assertions,
 });
 
-export default connect(mapStateToProps)(Feedback);
+const mapDispatchToProps = (dispatch) => ({
+  newReset: (state) => dispatch(resetScore(state)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Feedback);
