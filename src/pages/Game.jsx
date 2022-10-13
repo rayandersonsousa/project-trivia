@@ -58,10 +58,16 @@ class Game extends Component {
         item.classList.add('INCORRECT_ANSWER');
       }
     });
+    let assertions = 0;
     if (element.id === CORRECT_ANSWER) {
       const score = this.scoreAnwser();
       console.log('acertou');
-      getScore(score);
+      assertions += 1;
+      const scoreAndAssertions = {
+        score,
+        assertions,
+      };
+      getScore(scoreAndAssertions);
     } else {
       console.log('errou');
     }

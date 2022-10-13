@@ -14,11 +14,15 @@ class Feedback extends Component {
   }
 
   render() {
-    const { name, score } = this.props;
+    const { name, score, assertions } = this.props;
     const { urlGravatar } = this.state;
+    const assertionsNumber = 3;
     return (
       <div>
-        <h1 data-testid="feedback-text">Feedback</h1>
+        <h1 data-testid="feedback-text">
+          {assertions >= assertionsNumber ? 'Well Done!' : 'Could be better...'}
+        </h1>
+
         <div>
           <img src={ urlGravatar } alt="foto" data-testid="header-profile-picture" />
           <p data-testid="header-player-name">{name}</p>
@@ -37,6 +41,7 @@ Feedback.propTypes = {
 const mapStateToProps = (state) => ({
   score: state.player.score,
   name: state.player.name,
+  assertions: state.player.assertions,
 });
 
 export default connect(mapStateToProps)(Feedback);
