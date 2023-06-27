@@ -36,7 +36,7 @@ Nesta aplicação é possível:
 ## Skills aplicadas
 
 - Desenvolver um jogo de perguntas e respostas utilizando React.
-- Desenvolver a mecanica de pontuação dos jogares.
+- Desenvolver a mecânica de pontuação dos jogares.
 - Guardar a pontuação dos jogadores.
 - Desenvolver testes para garantir o bom funcionamento da aplicação.
 - Requisições de API.
